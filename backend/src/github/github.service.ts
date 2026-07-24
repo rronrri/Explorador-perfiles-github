@@ -18,13 +18,19 @@ export class GithubService {
     path: string,
     username: string,
   ): Promise<unknown> {
+    const headers: Record<string, string> = {
+      Accept: 'application/vnd.github+json',
+      'User-Agent': 'nacer-digital-github-profile-app',
+    };
+    // Con token la cuota de GitHub sube de 60 a 5000 req/hora
+    if (process.env.GITHUB_TOKEN) {
+      headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+    }
+
     let response: Response;
     try {
       response = await fetch(`${GITHUB_API_URL}${path}`, {
-        headers: {
-          Accept: 'application/vnd.github+json',
-          'User-Agent': 'nacer-digital-github-profile-app',
-        },
+        headers,
         signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       });
     } catch {
