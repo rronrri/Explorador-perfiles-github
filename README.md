@@ -1,8 +1,8 @@
 # Explorador de perfiles de GitHub — NestJS + NextJS
 
-**🌐 Demo en vivo:** https://explorador-perfiles-github.netlify.app
+**🌐 Demo en vivo:** https://explorador-perfiles-github.netlify.app/
 
-**API desplegada:** https://explorador-perfiles-github.onrender.com/user/rronrri
+**⚙️ API desplegada:** https://explorador-perfiles-github.onrender.com/ (ejemplo: [/user/rronrri](https://explorador-perfiles-github.onrender.com/user/rronrri))
 
 Aplicación que muestra la información de un perfil de GitHub. El backend (NestJS) expone un endpoint que consulta la API pública de GitHub, y el frontend (NextJS) consume **ese endpoint** para renderizar los datos.
 
@@ -107,3 +107,24 @@ Errores (ambos endpoints):
 
 - `frontend/.env.local` → `NEXT_PUBLIC_API_URL` (default `http://localhost:3001`)
 - CORS del backend permite `http://localhost:3000`
+
+Variables de entorno del backend (opcionales en local, usadas en producción):
+
+| Variable | Función |
+|---|---|
+| `PORT` | Puerto del servidor (default `3001`) |
+| `FRONTEND_ORIGIN` | Origen permitido por CORS (default `http://localhost:3000`) |
+| `GITHUB_TOKEN` | Token personal de GitHub; sube la cuota de la API de 60 a 5000 req/hora |
+
+## Despliegue
+
+```
+Usuario → Netlify (NextJS) → Render (NestJS) → api.github.com
+              ▲
+        UptimeRobot (ping cada 5 min al backend)
+```
+
+- **Frontend — Netlify** (https://explorador-perfiles-github.netlify.app/): build automático desde este repo con el runtime oficial de Next (`@netlify/plugin-nextjs`, configurado en `frontend/netlify.toml`). La URL del backend se inyecta en build con la variable `NEXT_PUBLIC_API_URL`.
+- **Backend — Render** (https://explorador-perfiles-github.onrender.com/): Web Service de Node desde la carpeta `backend/`, build `npm install && npm run build`, arranque `npm run start:prod`. Configurado con `GITHUB_TOKEN` (cuota de 5000 req/hora, necesaria porque en la nube la IP de salida es compartida) y `FRONTEND_ORIGIN` apuntando a Netlify para el CORS. Se activó `trust proxy` para que el rate limit identifique la IP real de cada visitante detrás del proxy de Render.
+- **UptimeRobot**: el plan gratuito de Render suspende el servicio tras 15 minutos sin tráfico, y despertarlo toma 30–50 s — mala primera impresión para quien visite la demo. Un monitor HTTP de UptimeRobot hace ping a `/user/rronrri` cada 5 minutos, manteniendo el backend despierto 24/7 y avisando por email si el servicio llega a caerse.
+- **CI/CD implícito**: cada `git push` a `main` redespliega automáticamente frontend (Netlify) y backend (Render).
