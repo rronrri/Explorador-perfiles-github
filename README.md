@@ -1,4 +1,8 @@
-# Perfil de GitHub — NestJS + NextJS
+# Explorador de perfiles de GitHub — NestJS + NextJS
+
+**🌐 Demo en vivo:** https://explorador-perfiles-github.netlify.app
+
+**API desplegada:** https://explorador-perfiles-github.onrender.com/user/rronrri
 
 Aplicación que muestra la información de un perfil de GitHub. El backend (NestJS) expone un endpoint que consulta la API pública de GitHub, y el frontend (NextJS) consume **ese endpoint** para renderizar los datos.
 
