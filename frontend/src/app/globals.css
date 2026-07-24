@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+/*
+  Identidad "git semantics":
+  - merged  #8250df → acento principal (morado de PR merged)
+  - open    #2da44e → éxito / estados OK (verde de PR open)
+  - closed  #cf222e → errores (rojo de PR closed)
+  Paleta fría, tipografía IBM Plex (Sans + Mono).
+*/
+:root {
+  --paper: #f1f2f6;
+  --card: #ffffff;
+  --ink: #1b1f27;
+  --muted: #5b6472;
+  --line: #d9dce4;
+  --merged: #8250df;
+  --merged-soft: #f3eefd;
+  --open: #1f883d;
+  --open-soft: #e8f5ec;
+  --closed: #cf222e;
+  --closed-soft: #fdeef0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14161c;
+    --card: #1c1f27;
+    --ink: #e8eaf0;
+    --muted: #98a1b3;
+    --line: #2e3340;
+    --merged: #a371f7;
+    --merged-soft: #2a2140;
+    --open: #3fb950;
+    --open-soft: #17281c;
+    --closed: #f85149;
+    --closed-soft: #33191c;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-merged: var(--merged);
+  --color-merged-soft: var(--merged-soft);
+  --color-open: var(--open);
+  --color-open-soft: var(--open-soft);
+  --color-closed: var(--closed);
+  --color-closed-soft: var(--closed-soft);
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-plex-sans), system-ui, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
