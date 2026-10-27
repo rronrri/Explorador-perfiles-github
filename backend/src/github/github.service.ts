@@ -33,6 +33,16 @@ export class GithubService {
         headers,
         signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       });
+      // Token vencido o revocado: GitHub responde 401 aunque la API sea pública.
+      // Se reintenta sin token (cuota de 60 req/h) para no tumbar el servicio.
+      if (response.status === 401 && headers.Authorization) {
+        console.warn('GITHUB_TOKEN inválido o vencido, reintentando sin token');
+        delete headers.Authorization;
+        response = await fetch(`${GITHUB_API_URL}${path}`, {
+          headers,
+          signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+        });
+      }
     } catch {
       throw new HttpException(
         'La API de GitHub no respondió a tiempo',

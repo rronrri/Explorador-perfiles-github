@@ -1,184 +1,141 @@
-"use client";
+import Link from "next/link";
+import { PROJECTS } from "./data/projects";
 
-import { FormEvent, useEffect, useState } from "react";
-import ProfileCard from "./components/ProfileCard";
-import RepoList from "./components/RepoList";
-import type { GithubRepo, GithubUser } from "./types";
+const HIGHLIGHTS = [
+  {
+    label: "Publicación",
+    title: "A Domain-Specific Language for Modeling and Implementing Agentic AI Workflows",
+    detail: "Coautor · ICI2ST 2026, EPN Quito · MDPI Engineering Proceedings",
+  },
+  {
+    label: "Emprendimiento",
+    title: "Hult Prize 2026 · Universidad del Azuay",
+    detail: "Miembro del equipo de PlantChain",
+  },
+  {
+    label: "En producción",
+    title: "ERP para una fábrica de joyería",
+    detail: "FastAPI + PostgreSQL + Next.js, usado a diario por el cliente",
+  },
+];
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
-const DEFAULT_USERNAME = "rronrri";
+const EXPERIENCE = [
+  { role: "Analista de TI e Innovación JR", org: "NovaCredit Banco Internacional", date: "2026" },
+  { role: "Desarrollador Full-Stack Freelance", org: "ERP Fénix Global, Beltà Collective", date: "2025 – 2026" },
+  { role: "Asistente de Sistemas", org: "MASOLUC – Cámara de Comercio", date: "2025" },
+  { role: "Prácticas en Desarrollo Web", org: "Departamento de TI, Universidad del Azuay", date: "2025" },
+];
+
+const BADGE = { privado: "privado", cliente: "cliente", público: "público" } as const;
 
 export default function Home() {
-  const [user, setUser] = useState<GithubUser | null>(null);
-  const [repos, setRepos] = useState<GithubRepo[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [search, setSearch] = useState(DEFAULT_USERNAME);
-
-  async function loadUser(username: string) {
-    const path = `/user/${encodeURIComponent(username)}`;
-    setLoading(true);
-    setError(null);
-    try {
-      const [res, reposRes] = await Promise.all([
-        fetch(`${API_URL}${path}`),
-        fetch(`${API_URL}${path}/repos`),
-      ]);
-      const body = await res.json();
-      if (!res.ok) {
-        throw new Error(body.message ?? "Error al consultar el perfil");
-      }
-      setUser(body as GithubUser);
-      setRepos(reposRes.ok ? ((await reposRes.json()) as GithubRepo[]) : null);
-    } catch (err) {
-      setUser(null);
-      setRepos(null);
-      setError(
-        err instanceof Error && err.message !== "Failed to fetch"
-          ? err.message
-          : "No se pudo conectar con el servidor, intenta de nuevo",
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    loadUser(DEFAULT_USERNAME);
-  }, []);
-
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-    const username = search.trim().replace(/^@/, "");
-    if (username) loadUser(username);
-  }
-
-  function handleClear() {
-    setUser(null);
-    setRepos(null);
-    setError(null);
-    setSearch("");
-  }
-
-  // Mantiene el perfil anterior en pantalla durante una nueva búsqueda
-  // para evitar el salto al layout centrado (parpadeo)
-  const hasProfile = user !== null;
-
-  const sharedRepos =
-    repos && user
-      ? repos.filter(
-          (r) => r.owner.toLowerCase() !== user.login.toLowerCase(),
-        ).length
-      : null;
-
-  const searchPanel = (
-    <>
-      <header>
-        <div className="flex items-center gap-3">
-          <svg
-            viewBox="0 0 16 16"
-            aria-hidden
-            className="h-8 w-8 shrink-0 fill-ink"
-          >
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
-          </svg>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Explorador de perfiles de GitHub
-          </h1>
-        </div>
-        <p className="mt-2 text-sm leading-relaxed text-muted">
-          Escribe un usuario de GitHub para ver su perfil y sus repositorios.
+  return (
+    <main className="mx-auto w-full max-w-6xl px-5 py-12 sm:py-16">
+      <header className="flex flex-col gap-5">
+        <p className="font-mono text-sm text-merged">rodrigo@portafolio:~$ whoami</p>
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Rodrigo Ortiz Barahona</h1>
+        <p className="max-w-2xl text-lg leading-relaxed text-muted">
+          Desarrollador full-stack e Ingeniero en Ciencias de la Computación (Universidad del Azuay). Construyo y
+          despliego productos completos: modelo de datos, API, interfaz, pruebas e infraestructura.
         </p>
+        <div className="flex flex-wrap gap-2 text-sm">
+          <a href="/cv/RodrigoOrtiz_CV_es.pdf" className="rounded-md bg-ink px-4 py-2 font-semibold text-paper">
+            CV (ES)
+          </a>
+          <a href="/cv/RodrigoOrtiz_CV_en.pdf" className="rounded-md border border-ink px-4 py-2 font-semibold">
+            CV (EN)
+          </a>
+          <a href="https://github.com/rronrri" target="_blank" rel="noreferrer" className="rounded-md border border-line bg-card px-4 py-2">
+            GitHub ↗
+          </a>
+          <a
+            href="https://www.linkedin.com/in/rodrigo-ortiz-b7a879232/"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-md border border-line bg-card px-4 py-2"
+          >
+            LinkedIn ↗
+          </a>
+          <a href="mailto:rodrigooba10@gmail.com" className="rounded-md border border-line bg-card px-4 py-2">
+            rodrigooba10@gmail.com
+          </a>
+        </div>
       </header>
 
-      <form
-        onSubmit={handleSubmit}
-        className="flex w-full items-stretch overflow-hidden rounded-lg border border-line bg-card focus-within:border-merged focus-within:ring-2 focus-within:ring-merged/20"
-      >
-        <span
-          aria-hidden
-          className="flex select-none items-center border-r border-line bg-paper px-3 font-mono text-sm text-muted"
-        >
-          @
-        </span>
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="usuario de GitHub"
-          aria-label="Usuario de GitHub"
-          className="min-w-0 flex-1 bg-transparent px-3 py-3 font-mono text-sm text-ink outline-none placeholder:text-muted/60"
-        />
-        {(user || error) && (
-          <button
-            type="button"
-            onClick={handleClear}
-            aria-label="Limpiar búsqueda"
-            title="Limpiar búsqueda"
-            className="px-2 font-mono text-sm text-muted transition hover:text-closed"
-          >
-            ✕
-          </button>
-        )}
-        <button
-          type="submit"
-          disabled={loading}
-          className="m-1.5 rounded-md bg-merged px-4 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
-        >
-          Buscar
-        </button>
-      </form>
+      <section className="mt-12 grid gap-3 md:grid-cols-3">
+        {HIGHLIGHTS.map((h) => (
+          <article key={h.label} className="rounded-xl border border-line bg-card p-4">
+            <p className="font-mono text-xs uppercase tracking-wide text-merged">{h.label}</p>
+            <p className="mt-2 font-semibold leading-snug">{h.title}</p>
+            <p className="mt-1 text-sm text-muted">{h.detail}</p>
+          </article>
+        ))}
+      </section>
 
-      {loading && (
-        <p
-          aria-live="polite"
-          className="animate-pulse font-mono text-sm text-muted"
-        >
-          Buscando perfil…
-        </p>
-      )}
-      {!loading && error && (
-        <div className="w-full rounded-lg border border-closed/30 bg-closed-soft p-5">
-          <p className="font-mono text-xs font-semibold uppercase tracking-wide text-closed">
-            error
+      <section id="proyectos" className="mt-16 scroll-mt-8">
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-2">
+          <h2 className="text-2xl font-bold">Proyectos</h2>
+          <p className="max-w-md text-sm text-muted">
+            Varios repositorios son privados o de clientes: cada uno tiene una demo interactiva con datos ficticios, sin
+            exponer el código.
           </p>
-          <p className="mt-1 text-sm text-ink">{error}</p>
         </div>
-      )}
-    </>
-  );
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {PROJECTS.map((p) => (
+            <Link
+              key={p.slug}
+              href={`/proyectos/${p.slug}`}
+              className="group flex flex-col overflow-hidden rounded-xl border border-line bg-card transition hover:-translate-y-0.5 hover:border-ink"
+            >
+              <div className="h-1.5" style={{ background: p.accent }} />
+              <div className="flex flex-1 flex-col gap-2 p-4">
+                <div className="flex items-center justify-between font-mono text-xs text-muted">
+                  <span>{p.kind}</span>
+                  <span className="rounded border border-line px-1.5">{BADGE[p.visibility]}</span>
+                </div>
+                <h3 className="text-lg font-semibold">{p.name}</h3>
+                <p className="text-sm text-muted">{p.tagline}</p>
+                <p className="mt-auto pt-3 font-mono text-xs text-muted">{p.stack.slice(0, 4).join(" · ")}</p>
+                <span className="text-sm font-semibold text-merged">Ver caso y demo →</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
 
-  // Sin perfil que mostrar: buscador centrado en la pantalla
-  if (!hasProfile) {
-    return (
-      <main className="flex min-h-screen items-center justify-center px-5">
-        <div className="flex w-full max-w-xl flex-col gap-6">{searchPanel}</div>
-      </main>
-    );
-  }
-
-  return (
-    <main className="min-h-screen px-5 py-8 lg:h-screen lg:overflow-hidden lg:px-10">
-      <div className="mx-auto flex h-full max-w-7xl flex-col gap-8 lg:flex-row">
-        {/* Columna izquierda: búsqueda + perfil */}
-        <aside className="flex flex-col gap-6 lg:w-[420px] lg:shrink-0 lg:overflow-y-auto lg:pr-1">
-          {searchPanel}
-          <div className={loading ? "opacity-40 transition-opacity" : ""}>
-            <ProfileCard user={user} sharedRepos={sharedRepos} />
-          </div>
-        </aside>
-
-        {/* Columna derecha: repositorios con scroll propio */}
-        {repos && (
-          <section
-            className={`min-w-0 flex-1 lg:overflow-y-auto lg:pr-1 ${
-              loading ? "opacity-40 transition-opacity" : ""
-            }`}
+      <section className="mt-16 grid gap-10 md:grid-cols-2">
+        <div>
+          <h2 className="mb-4 text-2xl font-bold">Experiencia</h2>
+          <ul className="divide-y divide-line rounded-xl border border-line bg-card">
+            {EXPERIENCE.map((e) => (
+              <li key={e.role} className="flex justify-between gap-3 p-4">
+                <div>
+                  <p className="font-semibold">{e.role}</p>
+                  <p className="text-sm text-muted">{e.org}</p>
+                </div>
+                <span className="whitespace-nowrap font-mono text-xs text-muted">{e.date}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h2 className="mb-4 text-2xl font-bold">Repos públicos</h2>
+          <Link
+            href="/explorador"
+            className="block rounded-xl border border-line bg-card p-5 transition hover:border-ink"
           >
-            <RepoList repos={repos} username={user.login} />
-          </section>
-        )}
-      </div>
+            <p className="font-semibold">Explorador de perfiles de GitHub →</p>
+            <p className="mt-1 text-sm text-muted">
+              NestJS + Next.js. Consulta la API de GitHub a través de su propio backend; muestra mi perfil y repos
+              públicos, o los de cualquier usuario.
+            </p>
+          </Link>
+        </div>
+      </section>
+
+      <footer className="mt-16 border-t border-line pt-6 font-mono text-xs text-muted">
+        Cuenca, Ecuador · Disponible para trabajo remoto
+      </footer>
     </main>
   );
 }

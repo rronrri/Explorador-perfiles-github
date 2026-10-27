@@ -15,9 +15,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Explorador de perfiles de GitHub",
+  title: "Rodrigo Ortiz · Desarrollador full-stack",
   description:
-    "App que muestra información de un perfil de GitHub usando un backend NestJS",
+    "Portafolio de Rodrigo Ortiz Barahona: proyectos, demos interactivas y explorador de perfiles de GitHub",
 };
 
 export default function RootLayout({
