@@ -49,7 +49,7 @@ export const PROJECTS: Project[] = [
       "Decisiones de arquitectura registradas como ADRs en una knowledge base",
       "Despliegue con Docker Compose detrás de Caddy (TLS automático)",
     ],
-    role: "Diseño, desarrollo y despliegue completos (backend, frontend, base de datos e infraestructura).",
+    role: "Desarrollado junto con un socio: diseño, desarrollo y despliegue (backend, frontend, base de datos e infraestructura).",
   },
   {
     slug: "fenix-erp",
@@ -106,7 +106,7 @@ export const PROJECTS: Project[] = [
       "Correos con React Email",
       "Docker para desarrollo y despliegue en Vercel",
     ],
-    role: "Desarrollo full-stack y rediseño visual completo.",
+    role: "Desarrollado junto con un socio: desarrollo full-stack y rediseño visual completo.",
     links: [{ label: "task-keep-lime.vercel.app", href: "https://task-keep-lime.vercel.app" }],
   },
   {
@@ -197,7 +197,7 @@ export const PROJECTS: Project[] = [
     kind: "Hult Prize 2026",
     visibility: "público",
     accent: "#16a34a",
-    stack: ["Smart contracts", "Web3", "Geolocalización", "Aplicación web"],
+    stack: ["React", "Solidity (token PLTC)", "Ethers.js", "MetaMask", "Node.js / Express"],
     problem:
       "La gente desconfía de los proyectos de reforestación: no sabe si su donación se convirtió en un árbol ni qué pasó con él.",
     solution:
@@ -208,7 +208,7 @@ export const PROJECTS: Project[] = [
       "Mapa con la ubicación de cada árbol",
     ],
     architecture: ["Emprendimiento presentado en el Hult Prize en la Universidad del Azuay (feb 2026)."],
-    role: "Miembro del equipo emprendedor: modelo de negocio y diseño de la plataforma.",
+    role: "Desarrollado con Julian Coronel: aplicación web, contrato de tokens PLTC y modelo de negocio presentado en el Hult Prize.",
   },
   {
     slug: "belta-collective",
@@ -224,7 +224,7 @@ export const PROJECTS: Project[] = [
       "Sitio e-commerce con catálogo, carrito, pasarelas de pago, personalización del tema y SEO on-page.",
     features: ["Catálogo y carrito", "Pasarelas de pago", "Mejoras de UX/UI", "SEO on-page"],
     architecture: ["WordPress + plugins de e-commerce, tema personalizado"],
-    role: "Diseño, desarrollo, carga de contenido y SEO.",
+    role: "Desarrollado junto con un socio: diseño, desarrollo, carga de contenido y SEO.",
     links: [{ label: "beltàcollective.es", href: "https://xn--beltcollective-jgb.es" }],
   },
   {

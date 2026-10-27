@@ -27,7 +27,7 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
       "Architecture decisions recorded as ADRs in a knowledge base",
       "Deployed with Docker Compose behind Caddy (automatic TLS)",
     ],
-    role: "End-to-end design, development and deployment (backend, frontend, database and infrastructure).",
+    role: "Built together with a partner: design, development and deployment (backend, frontend, database and infrastructure).",
   },
   "fenix-erp": {
     name: "Fénix Global ERP",
@@ -72,7 +72,7 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
       "E-mails with React Email",
       "Docker for development, deployed on Vercel",
     ],
-    role: "Full-stack development and complete visual redesign.",
+    role: "Built together with a partner: full-stack development and complete visual redesign.",
   },
   verbum: {
     tagline: "AI Bible app for older adults",
@@ -143,7 +143,7 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
       "Each citizen buys a token representing a tree to be planted in Cuenca. Planting, care and growth are recorded on the blockchain and shown on a map.",
     features: ["One token per sponsored tree", "Immutable history of tree events", "Map with each tree's location"],
     architecture: ["Startup presented at the Hult Prize at Universidad del Azuay (Feb 2026)."],
-    role: "Startup team member: business model and platform design.",
+    role: "Built with Julian Coronel: web application, PLTC token contract and the business model presented at the Hult Prize.",
   },
   "belta-collective": {
     tagline: "E-commerce store",
@@ -152,7 +152,7 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
     solution: "E-commerce site with catalog, cart, payment gateways, theme customization and on-page SEO.",
     features: ["Catalog and cart", "Payment gateways", "UX/UI improvements", "On-page SEO"],
     architecture: ["WordPress + e-commerce plugins, customized theme"],
-    role: "Design, development, content upload and SEO.",
+    role: "Built together with a partner: design, development, content upload and SEO.",
   },
   "pwa-recuerdos": {
     name: "Memories PWA",
