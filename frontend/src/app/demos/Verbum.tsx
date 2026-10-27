@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import type { Lang } from "../data/projects";
 import Phone from "./Phone";
+
+const T = {
+  es: { search: "¿Qué dice la Biblia sobre…?", empty: "{t.empty}", daily: "Video del día", saved: "★ Guardado", save: "☆ Guardar", share: "Compartir" },
+  en: { search: "Search a topic (in Spanish)…", empty: "Try: perdón, esperanza, familia…", daily: "Video of the day", saved: "★ Saved", save: "☆ Save", share: "Share" },
+};
 
 const FEED = [
   {
@@ -34,7 +40,8 @@ const FEED = [
   },
 ];
 
-export default function Verbum() {
+export default function Verbum({ lang }: { lang: Lang }) {
+  const t = T[lang];
   const [query, setQuery] = useState("");
   const [saved, setSaved] = useState<string[]>([]);
   const q = query.trim().toLowerCase();
@@ -49,13 +56,13 @@ export default function Verbum() {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="¿Qué dice la Biblia sobre…?"
+          placeholder={t.search}
           className="w-full rounded-full bg-white/95 px-4 py-2.5 text-base text-black outline-none"
         />
       </div>
       <div className="h-full snap-y snap-mandatory overflow-y-auto">
         {items.length === 0 && (
-          <p className="p-6 pt-24 text-center text-lg text-muted">Prueba con: perdón, esperanza, familia…</p>
+          <p className="p-6 pt-24 text-center text-lg text-muted">{t.empty}</p>
         )}
         {items.map((f) => (
           <section
@@ -63,7 +70,7 @@ export default function Verbum() {
             className="relative flex h-full snap-start flex-col justify-end gap-3 p-6 pb-10 text-white"
             style={{ background: f.bg }}
           >
-            <p className="text-sm font-semibold uppercase tracking-widest opacity-80">Video del día</p>
+            <p className="text-sm font-semibold uppercase tracking-widest opacity-80">{t.daily}</p>
             <p className="text-2xl font-semibold leading-snug">“{f.text}”</p>
             <p className="text-lg font-bold">{f.ref}</p>
             <p className="text-base opacity-90">{f.reflection}</p>
@@ -72,10 +79,10 @@ export default function Verbum() {
                 onClick={() => setSaved((s) => (s.includes(f.ref) ? s.filter((x) => x !== f.ref) : [...s, f.ref]))}
                 className="rounded-full bg-white/20 px-4 py-2 text-base font-semibold backdrop-blur"
               >
-                {saved.includes(f.ref) ? "★ Guardado" : "☆ Guardar"}
+                {saved.includes(f.ref) ? t.saved : t.save}
               </button>
               <span className="rounded-full bg-white/20 px-4 py-2 text-base font-semibold backdrop-blur">
-                Compartir
+                {t.share}
               </span>
             </div>
           </section>

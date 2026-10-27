@@ -1,6 +1,6 @@
 "use client";
 
-import type { DemoId } from "../data/projects";
+import type { DemoId, Lang } from "../data/projects";
 import Boton from "./Boton";
 import Erp from "./Erp";
 import Kanban from "./Kanban";
@@ -10,24 +10,24 @@ import Pwa from "./Pwa";
 import Sorteo from "./Sorteo";
 import Verbum from "./Verbum";
 
-export default function Demo({ id }: { id: DemoId }) {
+export default function Demo({ id, lang }: { id: DemoId; lang: Lang }) {
   switch (id) {
     case "odontograma":
-      return <Odontograma />;
+      return <Odontograma lang={lang} />;
     case "erp":
-      return <Erp />;
+      return <Erp lang={lang} />;
     case "kanban":
-      return <Kanban />;
+      return <Kanban lang={lang} />;
     case "verbum":
-      return <Verbum />;
+      return <Verbum lang={lang} />;
     case "sorteo":
-      return <Sorteo />;
+      return <Sorteo lang={lang} />;
     case "boton":
-      return <Boton />;
+      return <Boton lang={lang} />;
     case "plantchain":
-      return <PlantChain />;
+      return <PlantChain lang={lang} />;
     case "pwa":
-      return <Pwa />;
+      return <Pwa lang={lang} />;
     case "video":
       return (
         <video

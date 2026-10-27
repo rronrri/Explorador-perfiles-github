@@ -1,6 +1,34 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { Lang } from "../data/projects";
+
+const T = {
+  es: {
+    running: (s: number) => `Ronda en curso · ${s}s`,
+    closed: "Ronda cerrada",
+    round: (s: number) => `Ronda de ${s}s`,
+    go: "¡DALE!",
+    start: "Empezar",
+    batches: "Lotes enviados:",
+    flagged: "Ritmo demasiado regular: el anti-trampa marcó la sesión para revisión.",
+    you: "tú",
+    review: "tú (en revisión)",
+    top: "Top en vivo",
+  },
+  en: {
+    running: (s: number) => `Round in progress · ${s}s`,
+    closed: "Round closed",
+    round: (s: number) => `${s}s round`,
+    go: "SMASH!",
+    start: "Start",
+    batches: "Batches sent:",
+    flagged: "Rhythm too regular: the anti-cheat flagged this session for review.",
+    you: "you",
+    review: "you (under review)",
+    top: "Live top",
+  },
+};
 
 const ROUND_SECONDS = 20;
 const BOTS = [
@@ -18,7 +46,8 @@ function stddev(xs: number[]) {
   return Math.sqrt(xs.reduce((a, b) => a + (b - mean) ** 2, 0) / xs.length);
 }
 
-export default function Boton() {
+export default function Boton({ lang }: { lang: Lang }) {
+  const t = T[lang];
   const [running, setRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(ROUND_SECONDS);
   const [mine, setMine] = useState(0);
@@ -68,7 +97,7 @@ export default function Boton() {
   }
 
   const board = [
-    { name: flagged ? "tú (en revisión)" : "tú", score: flagged ? 0 : mine, me: true },
+    { name: flagged ? t.review : t.you, score: flagged ? 0 : mine, me: true },
     ...BOTS.map((b, i) => ({ name: b.name, score: bots[i], me: false })),
   ].sort((a, b) => b.score - a.score);
 
@@ -76,25 +105,25 @@ export default function Boton() {
     <div className="grid items-center gap-6 md:grid-cols-[1fr_1fr]">
       <div className="flex flex-col items-center gap-4">
         <p className="font-mono text-sm text-muted">
-          {active ? `Ronda en curso · ${timeLeft}s` : timeLeft <= 0 ? "Ronda cerrada" : `Ronda de ${ROUND_SECONDS}s`}
+          {active ? t.running(timeLeft) : timeLeft <= 0 ? t.closed : t.round(ROUND_SECONDS)}
         </p>
         <button
           onPointerDown={active ? press : start}
           className="h-40 w-40 select-none rounded-full bg-[#dc2626] text-lg font-bold text-white shadow-[0_8px_0_#991b1b] transition active:translate-y-1.5 active:shadow-[0_2px_0_#991b1b]"
         >
-          {active ? "¡DALE!" : "Empezar"}
+          {active ? t.go : t.start}
         </button>
         <p className="font-mono text-xs text-muted">
-          Lotes enviados: {batches.length ? batches.join(" · ") : "—"}
+          {t.batches} {batches.length ? batches.join(" · ") : "—"}
         </p>
         {flagged && (
           <p className="rounded-md bg-closed-soft px-3 py-2 text-center text-xs text-closed">
-            Ritmo demasiado regular: el anti-trampa marcó la sesión para revisión.
+            {t.flagged}
           </p>
         )}
       </div>
       <ol className="flex flex-col gap-1.5">
-        <p className="mb-1 font-mono text-xs uppercase tracking-wide text-muted">Top en vivo</p>
+        <p className="mb-1 font-mono text-xs uppercase tracking-wide text-muted">{t.top}</p>
         {board.map((r, i) => (
           <li
             key={r.name}

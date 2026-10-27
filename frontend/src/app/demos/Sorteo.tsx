@@ -1,11 +1,18 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import type { Lang } from "../data/projects";
 import { sha256 } from "./hash";
+
+const T = {
+  es: { seed: "Semilla pública", list: "Participantes (uno por línea)", hash: "sha256(semilla | lista ordenada)", winner: "Ganador", note: "Cualquiera puede repetir este cálculo con la semilla y la lista publicadas y obtener el mismo ganador.", empty: "Agrega participantes." },
+  en: { seed: "Public seed", list: "Participants (one per line)", hash: "sha256(seed | sorted list)", winner: "Winner", note: "Anyone can repeat this calculation with the published seed and list and get the same winner.", empty: "Add participants." },
+};
 
 const SAMPLE = ["ana_gta", "LuisPlays", "vicecity_fan", "Carla.R", "mateo-07", "leonida_king", "sofi.games", "JP_Ecuador"];
 
-export default function Sorteo() {
+export default function Sorteo({ lang }: { lang: Lang }) {
+  const t = T[lang];
   const [seed, setSeed] = useState("bitcoin-block-912345");
   const [list, setList] = useState(SAMPLE.join("\n"));
   const [result, setResult] = useState<{ hash: string; index: number; winner: string } | null>(null);
@@ -38,7 +45,7 @@ export default function Sorteo() {
     <div className="grid gap-5 md:grid-cols-2">
       <div className="flex flex-col gap-3">
         <label className="text-sm font-medium">
-          Semilla pública
+          {t.seed}
           <input
             value={seed}
             onChange={(e) => setSeed(e.target.value)}
@@ -46,7 +53,7 @@ export default function Sorteo() {
           />
         </label>
         <label className="text-sm font-medium">
-          Participantes (uno por línea)
+          {t.list}
           <textarea
             value={list}
             onChange={(e) => setList(e.target.value)}
@@ -59,22 +66,22 @@ export default function Sorteo() {
         {result && participants.length ? (
           <>
             <div>
-              <p className="font-mono text-xs uppercase text-muted">sha256(semilla | lista ordenada)</p>
+              <p className="font-mono text-xs uppercase text-muted">{t.hash}</p>
               <p className="mt-1 break-all font-mono text-xs">{result.hash}</p>
             </div>
             <p className="font-mono text-xs text-muted">
               hash mod {participants.length} = {result.index}
             </p>
             <div>
-              <p className="text-sm text-muted">Ganador</p>
+              <p className="text-sm text-muted">{t.winner}</p>
               <p className="text-3xl font-bold">{result.winner}</p>
             </div>
             <p className="text-xs text-muted">
-              Cualquiera puede repetir este cálculo con la semilla y la lista publicadas y obtener el mismo ganador.
+              {t.note}
             </p>
           </>
         ) : (
-          <p className="text-sm text-muted">Agrega participantes.</p>
+          <p className="text-sm text-muted">{t.empty}</p>
         )}
       </div>
     </div>

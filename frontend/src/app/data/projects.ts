@@ -1,3 +1,5 @@
+import { PROJECTS_EN } from "./projects.en";
+
 // Fuente única del portafolio: la portada y cada ficha /proyectos/[slug] leen de acá.
 // Los repos privados NO se enlazan: se muestran con caso de estudio + demo simulada
 // (reimplementación con datos ficticios, sin código del proyecto real).
@@ -272,6 +274,14 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-export function getProject(slug: string) {
-  return PROJECTS.find((p) => p.slug === slug);
+export type Lang = "es" | "en";
+
+// Devuelve el proyecto con sus textos en el idioma pedido (stack, demo y colores son comunes)
+export function localize(project: Project, lang: Lang): Project {
+  return lang === "en" ? { ...project, ...PROJECTS_EN[project.slug] } : project;
+}
+
+export function getProject(slug: string, lang: Lang = "es") {
+  const project = PROJECTS.find((p) => p.slug === slug);
+  return project && localize(project, lang);
 }

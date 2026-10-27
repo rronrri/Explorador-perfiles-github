@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { Lang } from "../data/projects";
 import { sha256 } from "./hash";
 
 interface Block {
@@ -9,20 +10,48 @@ interface Block {
   hash: string;
 }
 
-const EVENTS = ["Riego", "Poda", "Fertilización", "Medición: 1,20 m", "Revisión fitosanitaria"];
+const T = {
+  es: {
+    events: ["Riego", "Poda", "Fertilización", "Medición: 1,20 m", "Revisión fitosanitaria"],
+    genesis: "Génesis · PlantChain Cuenca",
+    token: (n: number, place: string) => `Token #${n} · Árbol nativo · ${place}`,
+    event: (n: number, e: string) => `Evento árbol #${n} · ${e}`,
+    tampered: " (alterado)",
+    sponsor: "Apadrinar árbol",
+    care: "Registrar cuidado",
+    tamper: "Intentar alterar el bloque 1",
+    block: "Bloque",
+    valid: "✓ válido",
+    invalid: "✕ inválido",
+  },
+  en: {
+    events: ["Watering", "Pruning", "Fertilizing", "Measurement: 1.20 m", "Plant health check"],
+    genesis: "Genesis · PlantChain Cuenca",
+    token: (n: number, place: string) => `Token #${n} · Native tree · ${place}`,
+    event: (n: number, e: string) => `Tree #${n} event · ${e}`,
+    tampered: " (tampered)",
+    sponsor: "Sponsor a tree",
+    care: "Record care",
+    tamper: "Try to tamper with block 1",
+    block: "Block",
+    valid: "✓ valid",
+    invalid: "✕ invalid",
+  },
+};
 const PLACES = ["Parque de la Madre", "Orillas del Tomebamba", "Parque El Paraíso", "Av. Solano"];
 
 async function makeBlock(data: string, prev: string): Promise<Block> {
   return { data, prev, hash: await sha256(prev + data) };
 }
 
-export default function PlantChain() {
+export default function PlantChain({ lang }: { lang: Lang }) {
+  const t = T[lang];
   const [chain, setChain] = useState<Block[]>([]);
   const [valid, setValid] = useState<boolean[]>([]);
 
   useEffect(() => {
-    makeBlock("Génesis · PlantChain Cuenca", "0".repeat(64)).then((b) => setChain([b]));
-  }, []);
+    makeBlock(t.genesis, "0".repeat(64)).then((b) => setChain([b]));
+  }, [t]);
 
   // Un bloque es válido si su hash coincide con su contenido y enlaza el hash del anterior
   useEffect(() => {
@@ -49,25 +78,25 @@ export default function PlantChain() {
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() =>
-            append(`Token #${trees + 1} · Árbol nativo · ${PLACES[trees % PLACES.length]}`)
+            append(t.token(trees + 1, PLACES[trees % PLACES.length]))
           }
           className="rounded-md bg-[#16a34a] px-3 py-1.5 text-sm font-semibold text-white"
         >
-          Apadrinar árbol
+          {t.sponsor}
         </button>
         <button
           disabled={trees === 0}
-          onClick={() => append(`Evento árbol #${trees} · ${EVENTS[chain.length % EVENTS.length]}`)}
+          onClick={() => append(t.event(trees, t.events[chain.length % t.events.length]))}
           className="rounded-md border border-line px-3 py-1.5 text-sm disabled:opacity-40"
         >
-          Registrar cuidado
+          {t.care}
         </button>
         <button
           disabled={chain.length < 2}
-          onClick={() => setChain((c) => c.map((b, i) => (i === 1 ? { ...b, data: b.data + " (alterado)" } : b)))}
+          onClick={() => setChain((c) => c.map((b, i) => (i === 1 ? { ...b, data: b.data + t.tampered } : b)))}
           className="rounded-md border border-closed/40 px-3 py-1.5 text-sm text-closed disabled:opacity-40"
         >
-          Intentar alterar el bloque 1
+          {t.tamper}
         </button>
       </div>
       <ol className="flex flex-col gap-2">
@@ -80,10 +109,10 @@ export default function PlantChain() {
           >
             <div className="flex justify-between gap-2">
               <b>
-                Bloque {i} · {b.data}
+                {t.block} {i} · {b.data}
               </b>
               <span className={`font-mono text-xs ${valid[i] === false ? "text-closed" : "text-open"}`}>
-                {valid[i] === false ? "✕ inválido" : "✓ válido"}
+                {valid[i] === false ? t.invalid : t.valid}
               </span>
             </div>
             <p className="mt-1 break-all font-mono text-[11px] text-muted">prev {b.prev.slice(0, 24)}…</p>
