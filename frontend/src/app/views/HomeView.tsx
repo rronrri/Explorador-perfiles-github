@@ -21,9 +21,9 @@ const T = {
     ],
     projects: "Proyectos",
     projectsNote:
-      "Varios repositorios son privados o de clientes: cada uno tiene una demo interactiva con datos ficticios, sin exponer el código.",
+      "Varios repositorios son privados o de clientes: cada proyecto muestra un recorrido en video y capturas del sistema real funcionando, sin exponer el código.",
     badge: { privado: "privado", cliente: "cliente", público: "público" },
-    seeCase: "Ver caso y demo →",
+    seeCase: "Ver el sistema funcionando →",
     experience: "Experiencia",
     jobs: [
       { role: "Analista de TI e Innovación JR", org: "NovaCredit Banco Internacional", date: "2026" },
@@ -55,9 +55,9 @@ const T = {
     ],
     projects: "Projects",
     projectsNote:
-      "Several repositories are private or belong to clients: each one has an interactive demo with mock data, without exposing the code.",
+      "Several repositories are private or belong to clients: each project shows a video walkthrough and screenshots of the real system running, without exposing the code.",
     badge: { privado: "private", cliente: "client", público: "public" },
-    seeCase: "See case study & demo →",
+    seeCase: "See it working →",
     experience: "Experience",
     jobs: [
       { role: "Junior IT & Innovation Analyst", org: "NovaCredit Banco Internacional", date: "2026" },

@@ -1,0 +1,13 @@
+# Render (plan gratuito) duerme el backend tras 15 min sin tráfico; este ping lo mantiene despierto.
+name: keep-alive-api
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -fsS -m 90 https://explorador-perfiles-github.onrender.com/user/rronrri > /dev/null

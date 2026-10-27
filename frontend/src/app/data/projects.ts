@@ -1,19 +1,9 @@
 import { PROJECTS_EN } from "./projects.en";
 
 // Fuente única del portafolio: la portada y cada ficha /proyectos/[slug] leen de acá.
-// Los repos privados NO se enlazan: se muestran con caso de estudio + demo simulada
-// (reimplementación con datos ficticios, sin código del proyecto real).
+// Los repos privados NO se enlazan: se muestran con caso de estudio + video y capturas
+// del sistema real (ver media.ts).
 
-export type DemoId =
-  | "odontograma"
-  | "erp"
-  | "kanban"
-  | "verbum"
-  | "sorteo"
-  | "boton"
-  | "plantchain"
-  | "pwa"
-  | "video";
 
 export interface Project {
   slug: string;
@@ -30,8 +20,6 @@ export interface Project {
   architecture: string[];
   role: string;
   links?: { label: string; href: string }[];
-  demo: DemoId;
-  demoNote: string;
 }
 
 export const PROJECTS: Project[] = [
@@ -62,8 +50,6 @@ export const PROJECTS: Project[] = [
       "Despliegue con Docker Compose detrás de Caddy (TLS automático)",
     ],
     role: "Diseño, desarrollo y despliegue completos (backend, frontend, base de datos e infraestructura).",
-    demo: "odontograma",
-    demoNote: "Haz clic en una pieza y luego en una de sus caras para registrar un hallazgo.",
   },
   {
     slug: "fenix-erp",
@@ -93,8 +79,6 @@ export const PROJECTS: Project[] = [
     ],
     role: "Levantamiento de requisitos con el dueño, desarrollo completo, despliegue y propuestas de nuevos módulos (contabilidad).",
     links: [{ label: "fenixglobal.online (acceso privado)", href: "https://fenixglobal.online" }],
-    demo: "erp",
-    demoNote: "Registra movimientos de inventario y avanza una orden por las etapas: el saldo y la merma se recalculan.",
   },
   {
     slug: "taskkeep",
@@ -123,8 +107,7 @@ export const PROJECTS: Project[] = [
       "Docker para desarrollo y despliegue en Vercel",
     ],
     role: "Desarrollo full-stack y rediseño visual completo.",
-    demo: "kanban",
-    demoNote: "Arrastra las tarjetas entre columnas. Los colores siguen la prioridad: baja, media, alta, crítica.",
+    links: [{ label: "task-keep-lime.vercel.app", href: "https://task-keep-lime.vercel.app" }],
   },
   {
     slug: "verbum",
@@ -152,8 +135,6 @@ export const PROJECTS: Project[] = [
       "Pipeline de generación de video por IA en el backend",
     ],
     role: "Especificación de producto, diseño de UX accesible y desarrollo.",
-    demo: "verbum",
-    demoNote: "Desliza el feed y prueba la búsqueda por tema.",
   },
   {
     slug: "primero-en-leonida",
@@ -181,8 +162,6 @@ export const PROJECTS: Project[] = [
       "Lo que decide un ganador lo pone la base, nunca el navegador",
     ],
     role: "Plan de negocio, arquitectura, desarrollo y documentación.",
-    demo: "sorteo",
-    demoNote: "Cambia la semilla o la lista: el ganador se recalcula igual en cualquier computador.",
   },
   {
     slug: "boton-rojo",
@@ -209,8 +188,6 @@ export const PROJECTS: Project[] = [
       "Un solo VPS con Caddy; frontend estático separado",
     ],
     role: "Especificación, diseño del anti-trampa y desarrollo.",
-    demo: "boton",
-    demoNote: "Machaca el botón contra bots simulados. Si haces clic demasiado regular, el anti-trampa te marca.",
   },
   {
     slug: "plantchain",
@@ -232,8 +209,6 @@ export const PROJECTS: Project[] = [
     ],
     architecture: ["Emprendimiento presentado en el Hult Prize en la Universidad del Azuay (feb 2026)."],
     role: "Miembro del equipo emprendedor: modelo de negocio y diseño de la plataforma.",
-    demo: "plantchain",
-    demoNote: "Apadrina un árbol y registra eventos: cada bloque enlaza el hash del anterior.",
   },
   {
     slug: "belta-collective",
@@ -251,8 +226,6 @@ export const PROJECTS: Project[] = [
     architecture: ["WordPress + plugins de e-commerce, tema personalizado"],
     role: "Diseño, desarrollo, carga de contenido y SEO.",
     links: [{ label: "beltàcollective.es", href: "https://xn--beltcollective-jgb.es" }],
-    demo: "video",
-    demoNote: "Recorrido grabado del sitio.",
   },
   {
     slug: "pwa-recuerdos",
@@ -269,14 +242,12 @@ export const PROJECTS: Project[] = [
     features: ["Instalable en Android e iOS", "Notificaciones push diarias", "Galería con subida protegida", "Costo de infraestructura: 0"],
     architecture: ["Sitio estático + 2 funciones serverless (GET/POST) en Vercel"],
     role: "Desarrollo completo.",
-    demo: "pwa",
-    demoNote: "Vista simulada de la app con datos de ejemplo.",
   },
 ];
 
 export type Lang = "es" | "en";
 
-// Devuelve el proyecto con sus textos en el idioma pedido (stack, demo y colores son comunes)
+// Devuelve el proyecto con sus textos en el idioma pedido (stack y colores son comunes)
 export function localize(project: Project, lang: Lang): Project {
   return lang === "en" ? { ...project, ...PROJECTS_EN[project.slug] } : project;
 }

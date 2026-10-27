@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProject, PROJECTS, type Lang } from "../data/projects";
-import Demo from "../demos/Demo";
+import Showcase from "./Showcase";
 import LangSwitch, { localePath } from "./LangSwitch";
 
 const T = {
   es: {
     back: "← proyectos",
-    demo: "Demo interactiva",
+    demo: "El sistema funcionando",
     visibility: {
-      privado: "Repositorio privado · demo simulada con datos ficticios",
+      privado: "Repositorio privado · código no publicado",
       cliente: "Proyecto para cliente · código no publicable",
       público: "Proyecto público",
     },
@@ -24,9 +24,9 @@ const T = {
   },
   en: {
     back: "← projects",
-    demo: "Interactive demo",
+    demo: "The system in action",
     visibility: {
-      privado: "Private repository · simulated demo with mock data",
+      privado: "Private repository · code not published",
       cliente: "Client project · code cannot be published",
       público: "Public project",
     },
@@ -89,8 +89,7 @@ export default function ProjectView({ slug, lang }: { slug: string; lang: Lang }
           <h2 className="text-lg font-semibold">{t.demo}</h2>
           <p className="font-mono text-xs text-muted">{t.visibility[project.visibility]}</p>
         </div>
-        <p className="mb-5 text-sm text-muted">{project.demoNote}</p>
-        <Demo id={project.demo} lang={lang} />
+        <Showcase slug={project.slug} lang={lang} />
       </section>
 
       <div className="mt-8 grid gap-6 md:grid-cols-2">

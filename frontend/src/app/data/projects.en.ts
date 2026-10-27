@@ -1,9 +1,9 @@
 import type { Project } from "./projects";
 
-// Traducción al inglés de los campos de texto; stack, slug, demo y colores salen de projects.ts
+// Traducción al inglés de los campos de texto; stack, slug y colores salen de projects.ts
 export type ProjectText = Pick<
   Project,
-  "tagline" | "kind" | "problem" | "solution" | "features" | "architecture" | "role" | "demoNote"
+  "tagline" | "kind" | "problem" | "solution" | "features" | "architecture" | "role"
 > & { name?: string };
 
 export const PROJECTS_EN: Record<string, ProjectText> = {
@@ -28,7 +28,6 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
       "Deployed with Docker Compose behind Caddy (automatic TLS)",
     ],
     role: "End-to-end design, development and deployment (backend, frontend, database and infrastructure).",
-    demoNote: "Click a tooth surface to record a finding with the selected condition.",
   },
   "fenix-erp": {
     name: "Fénix Global ERP",
@@ -52,7 +51,6 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
       "Automatic database backups",
     ],
     role: "Requirements gathering with the owner, full development, deployment and proposals for new modules (accounting).",
-    demoNote: "Record inventory movements and move an order through its stages: balance and loss are recalculated.",
   },
   taskkeep: {
     tagline: "Business task management",
@@ -75,7 +73,6 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
       "Docker for development, deployed on Vercel",
     ],
     role: "Full-stack development and complete visual redesign.",
-    demoNote: "Drag cards between columns. Colors follow priority: low, medium, high, critical.",
   },
   verbum: {
     tagline: "AI Bible app for older adults",
@@ -97,7 +94,6 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
       "AI video generation pipeline on the backend",
     ],
     role: "Product specification, accessible UX design and development.",
-    demoNote: "Scroll the feed and try searching by topic (the app's content is in Spanish: try “perdón” or “esperanza”).",
   },
   "primero-en-leonida": {
     tagline: "Verifiable subscription giveaways",
@@ -118,7 +114,6 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
       "Whatever decides a winner is set by the database, never by the browser",
     ],
     role: "Business plan, architecture, development and documentation.",
-    demoNote: "Change the seed or the list: the winner is recalculated the same way on any computer.",
   },
   "boton-rojo": {
     tagline: "Real-time competitive game",
@@ -138,7 +133,6 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
       "Single VPS with Caddy; separate static frontend",
     ],
     role: "Specification, anti-cheat design and development.",
-    demoNote: "Smash the button against simulated bots. Click too regularly and the anti-cheat flags you.",
   },
   plantchain: {
     tagline: "Blockchain tree sponsorship",
@@ -150,7 +144,6 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
     features: ["One token per sponsored tree", "Immutable history of tree events", "Map with each tree's location"],
     architecture: ["Startup presented at the Hult Prize at Universidad del Azuay (Feb 2026)."],
     role: "Startup team member: business model and platform design.",
-    demoNote: "Sponsor a tree and record events: each block links the previous block's hash.",
   },
   "belta-collective": {
     tagline: "E-commerce store",
@@ -160,7 +153,6 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
     features: ["Catalog and cart", "Payment gateways", "UX/UI improvements", "On-page SEO"],
     architecture: ["WordPress + e-commerce plugins, customized theme"],
     role: "Design, development, content upload and SEO.",
-    demoNote: "Recorded walkthrough of the site.",
   },
   "pwa-recuerdos": {
     name: "Memories PWA",
@@ -172,6 +164,5 @@ export const PROJECTS_EN: Record<string, ProjectText> = {
     features: ["Installable on Android and iOS", "Daily push notifications", "Gallery with protected upload", "Infrastructure cost: 0"],
     architecture: ["Static site + 2 serverless functions (GET/POST) on Vercel"],
     role: "Full development.",
-    demoNote: "Simulated view of the app with sample data.",
   },
 };

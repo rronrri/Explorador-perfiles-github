@@ -4,10 +4,12 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import ProfileCard from "../components/ProfileCard";
 import RepoList from "../components/RepoList";
+import { fetchFromGithub } from "../github-fallback";
 import type { GithubRepo, GithubUser } from "../types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 const DEFAULT_USERNAME = "rronrri";
+const API_TIMEOUT_MS = 20_000;
 
 export default function Home() {
   const [user, setUser] = useState<GithubUser | null>(null);
@@ -16,15 +18,32 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState(DEFAULT_USERNAME);
 
+  const [slow, setSlow] = useState(false);
+
   async function loadUser(username: string) {
     const path = `/user/${encodeURIComponent(username)}`;
     setLoading(true);
     setError(null);
+    setSlow(false);
+    // El backend gratuito se duerme tras 15 min sin uso: avisa si tarda en despertar
+    const slowTimer = setTimeout(() => setSlow(true), 4000);
     try {
-      const [res, reposRes] = await Promise.all([
-        fetch(`${API_URL}${path}`),
-        fetch(`${API_URL}${path}/repos`),
-      ]);
+      let res: Response;
+      let reposRes: Response;
+      try {
+        const signal = AbortSignal.timeout(API_TIMEOUT_MS);
+        [res, reposRes] = await Promise.all([
+          fetch(`${API_URL}${path}`, { signal }),
+          fetch(`${API_URL}${path}/repos`, { signal }),
+        ]);
+        if (res.status >= 500) throw new Error("backend no disponible");
+      } catch {
+        // Backend dormido o caído: mismos datos directo desde la API pública de GitHub
+        const data = await fetchFromGithub(username);
+        setUser(data.user);
+        setRepos(data.repos);
+        return;
+      }
       const body = await res.json();
       if (!res.ok) {
         throw new Error(body.message ?? "Error al consultar el perfil");
@@ -40,12 +59,15 @@ export default function Home() {
           : "No se pudo conectar con el servidor, intenta de nuevo",
       );
     } finally {
+      clearTimeout(slowTimer);
+      setSlow(false);
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    loadUser(DEFAULT_USERNAME);
+    const t = setTimeout(() => loadUser(DEFAULT_USERNAME), 0);
+    return () => clearTimeout(t);
   }, []);
 
   function handleSubmit(event: FormEvent) {
@@ -138,7 +160,9 @@ export default function Home() {
           aria-live="polite"
           className="animate-pulse font-mono text-sm text-muted"
         >
-          Buscando perfil…
+          {slow
+            ? "Despertando el servidor gratuito (puede tardar unos segundos)…"
+            : "Buscando perfil…"}
         </p>
       )}
       {!loading && error && (
